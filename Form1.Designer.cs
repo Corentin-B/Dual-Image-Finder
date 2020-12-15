@@ -31,7 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.textBox_1 = new System.Windows.Forms.TextBox();
             this.folderBrowserDialog_1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.button_targetFolder = new System.Windows.Forms.Button();
+            this.button_TargetFolder = new System.Windows.Forms.Button();
             this.pictureBox_left = new System.Windows.Forms.PictureBox();
             this.pictureBox_right = new System.Windows.Forms.PictureBox();
             this.label_text_TitleImgLeft = new System.Windows.Forms.Label();
@@ -46,6 +46,7 @@
             this.button_ImgLeftDelete = new System.Windows.Forms.Button();
             this.label_text_ScannedImg = new System.Windows.Forms.Label();
             this.label_NbImgScanned = new System.Windows.Forms.Label();
+            this.button_Start = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_left)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_right)).BeginInit();
             this.SuspendLayout();
@@ -58,19 +59,19 @@
             this.textBox_1.Size = new System.Drawing.Size(592, 20);
             this.textBox_1.TabIndex = 0;
             // 
-            // button_targetFolder
+            // button_TargetFolder
             // 
-            this.button_targetFolder.BackColor = System.Drawing.Color.Transparent;
-            this.button_targetFolder.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button_targetFolder.BackgroundImage")));
-            this.button_targetFolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_targetFolder.ForeColor = System.Drawing.Color.White;
-            this.button_targetFolder.Location = new System.Drawing.Point(12, 11);
-            this.button_targetFolder.Name = "button_targetFolder";
-            this.button_targetFolder.Size = new System.Drawing.Size(162, 23);
-            this.button_targetFolder.TabIndex = 2;
-            this.button_targetFolder.Text = "Emplacement du dossier cible";
-            this.button_targetFolder.UseVisualStyleBackColor = false;
-            this.button_targetFolder.Click += new System.EventHandler(this.button_targetFolder_Click);
+            this.button_TargetFolder.BackColor = System.Drawing.Color.Transparent;
+            this.button_TargetFolder.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button_TargetFolder.BackgroundImage")));
+            this.button_TargetFolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button_TargetFolder.ForeColor = System.Drawing.Color.White;
+            this.button_TargetFolder.Location = new System.Drawing.Point(12, 11);
+            this.button_TargetFolder.Name = "button_TargetFolder";
+            this.button_TargetFolder.Size = new System.Drawing.Size(162, 23);
+            this.button_TargetFolder.TabIndex = 2;
+            this.button_TargetFolder.Text = "Emplacement du dossier cible";
+            this.button_TargetFolder.UseVisualStyleBackColor = false;
+            this.button_TargetFolder.Click += new System.EventHandler(this.button_targetFolder_Click);
             // 
             // pictureBox_left
             // 
@@ -242,6 +243,20 @@
             this.label_NbImgScanned.Text = "label_NbImgScanned";
             this.label_NbImgScanned.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // button_Start
+            // 
+            this.button_Start.BackColor = System.Drawing.Color.Transparent;
+            this.button_Start.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button_Start.BackgroundImage")));
+            this.button_Start.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button_Start.ForeColor = System.Drawing.Color.White;
+            this.button_Start.Location = new System.Drawing.Point(358, 64);
+            this.button_Start.Name = "button_Start";
+            this.button_Start.Size = new System.Drawing.Size(68, 23);
+            this.button_Start.TabIndex = 17;
+            this.button_Start.Text = "Démarrer";
+            this.button_Start.UseVisualStyleBackColor = false;
+            this.button_Start.Click += new System.EventHandler(this.button_Start_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -249,6 +264,7 @@
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(784, 461);
+            this.Controls.Add(this.button_Start);
             this.Controls.Add(this.label_NbImgScanned);
             this.Controls.Add(this.label_text_ScannedImg);
             this.Controls.Add(this.button_ImgLeftNext);
@@ -263,7 +279,7 @@
             this.Controls.Add(this.label_text_TitleImgLeft);
             this.Controls.Add(this.pictureBox_right);
             this.Controls.Add(this.pictureBox_left);
-            this.Controls.Add(this.button_targetFolder);
+            this.Controls.Add(this.button_TargetFolder);
             this.Controls.Add(this.textBox_1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -281,7 +297,7 @@
 
         private System.Windows.Forms.TextBox textBox_1;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog_1;
-        private System.Windows.Forms.Button button_targetFolder;
+        private System.Windows.Forms.Button button_TargetFolder;
         private System.Windows.Forms.PictureBox pictureBox_left;
         private System.Windows.Forms.PictureBox pictureBox_right;
         private System.Windows.Forms.Label label_text_TitleImgLeft;
@@ -296,6 +312,7 @@
         private System.Windows.Forms.Button button_ImgLeftDelete;
         private System.Windows.Forms.Label label_text_ScannedImg;
         private System.Windows.Forms.Label label_NbImgScanned;
+        private System.Windows.Forms.Button button_Start;
     }
 }
 

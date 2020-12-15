@@ -23,19 +23,24 @@ namespace Dual_Image_Finder
             this.textBox_1.Text = this.folderBrowserDialog_1.SelectedPath;
         }
 
+        private void button_Start_Click(object sender, EventArgs e)
+        {
+            //Call search method
+        }
+
         private void button_ImgLeftNext_Click(object sender, EventArgs e)
         {
-
+            //Continue
         }
 
         private void button_ImgLeftFolder_Click(object sender, EventArgs e)
         {
-
+            //Open folder current image
         }
 
         private void button_ImgLeftDelete_Click(object sender, EventArgs e)
         {
-
+            //Delete Image
         }
 
         private void button_ImgRightNext_Click(object sender, EventArgs e)

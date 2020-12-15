@@ -1,11 +1,6 @@
-﻿using System;
+﻿using Dual_Image_Finder.Models;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Dual_Image_Finder
@@ -26,6 +21,13 @@ namespace Dual_Image_Finder
         private void button_Start_Click(object sender, EventArgs e)
         {
             //Call search method
+            ImageFinder imageFinder = new ImageFinder();
+            List<InfoImage> maliste = imageFinder.GetImagesInFolder(this.folderBrowserDialog_1.SelectedPath);
+            
+            foreach(InfoImage unitem in maliste)
+            {
+                Console.WriteLine(unitem);
+            }
         }
 
         private void button_ImgLeftNext_Click(object sender, EventArgs e)
@@ -45,17 +47,17 @@ namespace Dual_Image_Finder
 
         private void button_ImgRightNext_Click(object sender, EventArgs e)
         {
-
+            //Continue
         }
 
         private void button_ImgRightFolder_Click(object sender, EventArgs e)
         {
-
+            //Open folder current image
         }
 
         private void button_ImgRightDelete_Click(object sender, EventArgs e)
         {
-
+            //Delete Image
         }
     }
 }

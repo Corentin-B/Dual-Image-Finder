@@ -247,6 +247,7 @@
             // 
             this.button_Start.BackColor = System.Drawing.Color.Transparent;
             this.button_Start.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button_Start.BackgroundImage")));
+            this.button_Start.Enabled = false;
             this.button_Start.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_Start.ForeColor = System.Drawing.Color.White;
             this.button_Start.Location = new System.Drawing.Point(358, 64);

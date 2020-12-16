@@ -110,9 +110,9 @@
             this.label_text_TitleImgRight.BackColor = System.Drawing.Color.Transparent;
             this.label_text_TitleImgRight.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_text_TitleImgRight.ForeColor = System.Drawing.Color.White;
-            this.label_text_TitleImgRight.Location = new System.Drawing.Point(429, 48);
+            this.label_text_TitleImgRight.Location = new System.Drawing.Point(432, 48);
             this.label_text_TitleImgRight.Name = "label_text_TitleImgRight";
-            this.label_text_TitleImgRight.Size = new System.Drawing.Size(343, 13);
+            this.label_text_TitleImgRight.Size = new System.Drawing.Size(340, 13);
             this.label_text_TitleImgRight.TabIndex = 6;
             this.label_text_TitleImgRight.Text = "Image cible";
             this.label_text_TitleImgRight.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;

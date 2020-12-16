@@ -17,7 +17,7 @@ namespace Dual_Image_Finder
             foreach (string File in FileInFolder)
             {
                 InfoImage infoImage = new InfoImage();
-                infoImage.Name = "";
+                infoImage.Name = Path.GetFileName(File);
                 infoImage.Path = File;
 
                 Image image = Image.FromFile(File);

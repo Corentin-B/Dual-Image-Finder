@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Dual_Image_Finder
@@ -30,14 +31,11 @@ namespace Dual_Image_Finder
 
         private void button_Start_Click(object sender, EventArgs e)
         {
-            //Call search method
-
             //Create Thread
+            TComparator tComparator = new TComparator(this.folderBrowserDialog_1.SelectedPath);
+            Thread threadComparator = new Thread(tComparator.ThreadSupervisor);
+            threadComparator.Start();
 
-            ImageFinder imageFinder = new ImageFinder();
-            List<InfoImage> maliste = imageFinder.GetImagesInFolder(this.folderBrowserDialog_1.SelectedPath);
-            Comparator comparator = new Comparator();
-            comparator.ImageComparator(maliste);
         }
 
         private void button_ImgLeftNext_Click(object sender, EventArgs e)

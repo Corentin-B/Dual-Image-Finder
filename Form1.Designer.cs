@@ -47,16 +47,17 @@
             this.label_text_ScannedImg = new System.Windows.Forms.Label();
             this.label_NbImgScanned = new System.Windows.Forms.Label();
             this.button_Start = new System.Windows.Forms.Button();
+            this.label_percentage = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_left)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_right)).BeginInit();
             this.SuspendLayout();
             // 
             // textBox_1
             // 
-            this.textBox_1.Location = new System.Drawing.Point(180, 12);
+            this.textBox_1.Location = new System.Drawing.Point(203, 12);
             this.textBox_1.Name = "textBox_1";
             this.textBox_1.ReadOnly = true;
-            this.textBox_1.Size = new System.Drawing.Size(592, 20);
+            this.textBox_1.Size = new System.Drawing.Size(569, 20);
             this.textBox_1.TabIndex = 0;
             // 
             // button_TargetFolder
@@ -64,10 +65,11 @@
             this.button_TargetFolder.BackColor = System.Drawing.Color.Transparent;
             this.button_TargetFolder.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button_TargetFolder.BackgroundImage")));
             this.button_TargetFolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button_TargetFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_TargetFolder.ForeColor = System.Drawing.Color.White;
             this.button_TargetFolder.Location = new System.Drawing.Point(12, 11);
             this.button_TargetFolder.Name = "button_TargetFolder";
-            this.button_TargetFolder.Size = new System.Drawing.Size(162, 23);
+            this.button_TargetFolder.Size = new System.Drawing.Size(185, 23);
             this.button_TargetFolder.TabIndex = 2;
             this.button_TargetFolder.Text = "Emplacement du dossier cible";
             this.button_TargetFolder.UseVisualStyleBackColor = false;
@@ -249,6 +251,7 @@
             this.button_Start.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button_Start.BackgroundImage")));
             this.button_Start.Enabled = false;
             this.button_Start.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button_Start.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_Start.ForeColor = System.Drawing.Color.White;
             this.button_Start.Location = new System.Drawing.Point(358, 64);
             this.button_Start.Name = "button_Start";
@@ -258,6 +261,18 @@
             this.button_Start.UseVisualStyleBackColor = false;
             this.button_Start.Click += new System.EventHandler(this.button_Start_Click);
             // 
+            // label_percentage
+            // 
+            this.label_percentage.BackColor = System.Drawing.Color.Transparent;
+            this.label_percentage.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_percentage.ForeColor = System.Drawing.Color.White;
+            this.label_percentage.Location = new System.Drawing.Point(358, 321);
+            this.label_percentage.Name = "label_percentage";
+            this.label_percentage.Size = new System.Drawing.Size(68, 43);
+            this.label_percentage.TabIndex = 18;
+            this.label_percentage.Text = "label_percentage";
+            this.label_percentage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -265,6 +280,7 @@
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(784, 461);
+            this.Controls.Add(this.label_percentage);
             this.Controls.Add(this.button_Start);
             this.Controls.Add(this.label_NbImgScanned);
             this.Controls.Add(this.label_text_ScannedImg);
@@ -314,6 +330,7 @@
         private System.Windows.Forms.Label label_text_ScannedImg;
         private System.Windows.Forms.Label label_NbImgScanned;
         private System.Windows.Forms.Button button_Start;
+        private System.Windows.Forms.Label label_percentage;
     }
 }
 

@@ -4,16 +4,17 @@ namespace Dual_Image_Finder.Models
 {
     class InfoImage
     {
+        //TODO builder
+
         public string Name { get; set; }
         public string Path { get; set; }
-        public string Bitmap { get; set; }
         public bool Deleted { get; set; }
+        public Bitmap Bitmap { get; set; }
 
-        public InfoImage(string name, string path, string bitmap, bool deleted)
+        public InfoImage(string name, string path, bool deleted)
         {
             Name = name;
             Path = path;
-            Bitmap = bitmap;
             Deleted = deleted;
         }
 

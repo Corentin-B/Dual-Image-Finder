@@ -1,16 +1,17 @@
 ﻿using Dual_Image_Finder.Models;
-using System;
 using System.Collections.Generic;
-using System.Threading;
 
 namespace Dual_Image_Finder
 {
     class TComparator
     {
         private string folderPath;
+        private readonly MainForm mainForm;
 
-        public TComparator(string folderPath)
+
+        public TComparator(MainForm mainForm, string folderPath)
         {
+            this.mainForm = mainForm;
             this.folderPath = folderPath;
         }
 
@@ -19,23 +20,26 @@ namespace Dual_Image_Finder
             ImageFinder imageFinder = new ImageFinder();
             List<InfoImage> listInfoImage = imageFinder.GetImagesInFolder(folderPath);
 
-            ImageComparator(listInfoImage);
+            StartComparator(listInfoImage);
+            mainForm.LeftInfoImage = listInfoImage[0];
         }
 
-        private void ImageComparator(List<InfoImage> listInfoImages)
+        private void StartComparator(List<InfoImage> listInfoImage)
         {
-            for (int i = 0; i < listInfoImages.Count; i++)
-            {
-                Console.WriteLine(listInfoImages[i].Deleted);
+            int idLeftImage = 0;
+            int idRightImage = 0;
 
-                for (int j = i+1; j < listInfoImages.Count; j++)
-                {
-                    if (listInfoImages[i].Equals(listInfoImages[j]))
-                    {
-                        Console.WriteLine(true);
-                    }
-                }
+            if (mainForm.LeftInfoImage != null)
+            {
+                idLeftImage = listInfoImage.FindIndex(image => image.Name == mainForm.LeftInfoImage.Name);
             }
+            if (mainForm.RightInfoImage != null)
+            {
+                idRightImage = listInfoImage.FindIndex(image => image.Name == mainForm.LeftInfoImage.Name);
+            }
+
+            Comparator comparator = new Comparator(mainForm);
+            comparator.ListImageComparator(listInfoImage, idLeftImage, idRightImage);
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace Dual_Image_Finder
 {
-    class Delete
+    class PopUpDelete
     {
         public static void deleteImage(string ImagePath)
         {

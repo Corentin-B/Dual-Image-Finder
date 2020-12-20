@@ -2,7 +2,6 @@
 using System;
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
@@ -11,19 +10,29 @@ namespace Dual_Image_Finder
 {
     public partial class MainForm : Form
     {
+        private volatile Thread threadComparator;
+        private int percentSimilatiry;
+
         private volatile InfoImage leftInfoImage;
         private volatile InfoImage rightInfoImage;
-        private volatile Thread threadComparator;
+        private volatile AutoResetEvent autoEvent = new AutoResetEvent(false);
 
         internal InfoImage LeftInfoImage { get => leftInfoImage; set => leftInfoImage = value; }
         internal InfoImage RightInfoImage { get => rightInfoImage; set => rightInfoImage = value; }
+        public AutoResetEvent AutoEvent { get => autoEvent; set => autoEvent = value; }
 
         private delegate void SafeCallDelegateProgress(string value);
+        private delegate void SafeCallDelegatePercentage(string value);
+        private delegate void SafeCallDelegateButton();
 
+
+        //TODO Déplacer les images dans un autre dossier "Duplicate"
 
         public MainForm()
         {
             InitializeComponent();
+
+            int initialTrackBarValue = 10;
 
             label_NbImgScanned.Text = "";
             label_NbImgScanned.Visible = false;
@@ -31,6 +40,13 @@ namespace Dual_Image_Finder
 
             label_percentage.Text = "";
             label_percentage.Visible = false;
+
+            trackBar1.Value = initialTrackBarValue;
+            percentSimilatiry = trackBar1.Value;
+            label_percentsimilarity.Text = trackBar1.Value.ToString() + "%";
+
+            label_text_DescImgLeft.Text = "";
+            label_text_DescImgRight.Text = "";
 
             resetFront();
         }
@@ -55,20 +71,20 @@ namespace Dual_Image_Finder
             button_Start.Enabled = false;
             button_TargetFolder.Enabled = false;
 
-            TComparator tComparator = new TComparator(this, this.folderBrowserDialog_1.SelectedPath);
+            TComparator tComparator = new TComparator(this, this.folderBrowserDialog_1.SelectedPath, percentSimilatiry);
             threadComparator = new Thread(tComparator.ThreadSupervisor);
             threadComparator.Start();
 
             label_NbImgScanned.Visible = true;
             label_percentage.Visible = true;
             label_text_ScannedImg.Visible = true;
-            resetFront();
         }
 
         private void button_ImgLeftNext_Click(object sender, EventArgs e)
         {
             //Continue
-            threadComparator.Resume();
+            //threadComparator.Resume();
+            autoEvent.Set();
             resetFront();
         }
 
@@ -79,14 +95,16 @@ namespace Dual_Image_Finder
 
         private void button_ImgLeftDelete_Click(object sender, EventArgs e)
         {
-            deleteFile(LeftInfoImage.Path);
             //Set deleted to true in list
+            deleteFile(LeftInfoImage.Path);
+            LeftInfoImage.Deleted = true;
         }
 
         private void button_ImgRightNext_Click(object sender, EventArgs e)
         {
             //Continue
-            threadComparator.Resume();
+            //threadComparator.Resume();
+            autoEvent.Set();
             resetFront();
         }
 
@@ -97,8 +115,15 @@ namespace Dual_Image_Finder
 
         private void button_ImgRightDelete_Click(object sender, EventArgs e)
         {
-            deleteFile(RightInfoImage.Path);
             //Set deleted to true in list
+            deleteFile(RightInfoImage.Path);
+            RightInfoImage.Deleted = true;
+        }
+
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {
+            label_percentsimilarity.Text = trackBar1.Value.ToString() + "%";
+            percentSimilatiry = trackBar1.Value;
         }
 
         #endregion
@@ -139,35 +164,41 @@ namespace Dual_Image_Finder
 
         private void resetFront()
         {
-            label_text_DescImgLeft.Text = "";
-            label_text_DescImgLeft.Visible = false;
             button_ImgLeftNext.Enabled = false;
             button_ImgLeftFolder.Enabled = false;
             button_ImgLeftDelete.Enabled = false;
+            button_ImgLeftNext.Visible = false;
+            button_ImgLeftFolder.Visible = false;
+            button_ImgLeftDelete.Visible = false;
 
-            label_text_DescImgRight.Text = "";
-            label_text_DescImgRight.Visible = false;
             button_ImgRightNext.Enabled = false;
             button_ImgRightFolder.Enabled = false;
             button_ImgRightDelete.Enabled = false;
+            button_ImgRightNext.Visible = false;
+            button_ImgRightFolder.Visible = false;
+            button_ImgRightDelete.Visible = false;
         }
 
-        private void showFront()
+        private void showFrontButton()
         {
-            label_text_DescImgLeft.Visible = true;
             button_ImgLeftNext.Enabled = true;
             button_ImgLeftFolder.Enabled = true;
             button_ImgLeftDelete.Enabled = true;
+            button_ImgLeftNext.Visible = true;
+            button_ImgLeftFolder.Visible = true;
+            button_ImgLeftDelete.Visible = true;
 
-            label_text_DescImgRight.Visible = true;
             button_ImgRightNext.Enabled = true;
             button_ImgRightFolder.Enabled = true;
             button_ImgRightDelete.Enabled = true;
+            button_ImgRightNext.Visible = true;
+            button_ImgRightFolder.Visible = true;
+            button_ImgRightDelete.Visible = true;
         }
 
         #endregion
 
-        #region update
+        #region threadSyncronisation
 
         public void UpdateLabelNbImgScanned(string value)
         {
@@ -182,24 +213,36 @@ namespace Dual_Image_Finder
             }
         }
 
-        public void StopThread()
+        public void UpdateLabelPercentage(string value)
         {
-            threadComparator.Suspend();
+            if (label_percentage.InvokeRequired)
+            {
+                SafeCallDelegatePercentage d = new SafeCallDelegatePercentage(UpdateLabelPercentage);
+                label_percentage.Invoke(d, new object[] { value });
+            }
+            else
+            {
+                label_percentage.Text = value;
+                pictureBox_left.BackgroundImage = Image.FromFile(LeftInfoImage.Path);
+                pictureBox_right.BackgroundImage = Image.FromFile(RightInfoImage.Path);
+                label_text_DescImgLeft.Text = LeftInfoImage.Name;
+                label_text_DescImgRight.Text = RightInfoImage.Name;
+            }
+        }
+
+        public void ShowButton()
+        {
+            if (button_ImgLeftDelete.InvokeRequired)
+            {
+                SafeCallDelegateButton d = new SafeCallDelegateButton(ShowButton);
+                button_ImgLeftDelete.Invoke(d, new object[] { });
+            }
+            else
+            {
+                showFrontButton();
+            }
         }
 
         #endregion
-
-        private static ImageCodecInfo GetEncoderInfo(String mimeType)
-        {
-            int j;
-            ImageCodecInfo[] encoders;
-            encoders = ImageCodecInfo.GetImageEncoders();
-            for (j = 0; j < encoders.Length; ++j)
-            {
-                if (encoders[j].MimeType == mimeType)
-                    return encoders[j];
-            }
-            return null;
-        }
     }
 }

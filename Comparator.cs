@@ -14,21 +14,21 @@ namespace Dual_Image_Finder
             this.mainForm = mainForm;
         }
 
-        public void ListImageComparator(List<InfoImage> listInfoImages, int idLeftImage, int idRightImage)
+        public bool ListImageComparator(List<InfoImage> listInfoImages, int idLeftImage, int idRightImage, int comparisonRate)
         {
             int startImage = idLeftImage;
+            mainForm.UpdateLabelNbImgScanned((startImage + 1).ToString() + " /" + listInfoImages.Count);
 
             //Démarer la recherche en fonction des images actuelles
             for (int i = startImage; i < listInfoImages.Count; i++)
             {
                 if (!listInfoImages[i].Deleted)
                 {
-                    InfoImage leftInfoImage = listInfoImages[i];
-                    Image imageLeft = Image.FromFile(leftInfoImage.Path);
-                    leftInfoImage.Bitmap = new Bitmap(imageLeft);
+                    InfoImage leftInfoImage = GetInfoImageBitmap(listInfoImages[i]);
 
                     for (int j = i + 1; j < listInfoImages.Count; j++)
                     {
+                        Console.WriteLine(i + " - " + j);
                         if (i <= startImage && j <= idRightImage)
                         {
                             j = idRightImage;
@@ -43,30 +43,34 @@ namespace Dual_Image_Finder
                             continue;
                         }
 
-                        InfoImage rightInfoImage = listInfoImages[j];
-                        Image imageRight = Image.FromFile(rightInfoImage.Path);
-                        rightInfoImage.Bitmap = new Bitmap(imageRight);
-
-                        Console.WriteLine(ImageComparator(rightInfoImage, leftInfoImage));
+                        InfoImage rightInfoImage = GetInfoImageBitmap(listInfoImages[j]);
 
                         mainForm.LeftInfoImage = listInfoImages[i];
                         mainForm.RightInfoImage = listInfoImages[j];
+                        mainForm.UpdateLabelPercentage("Searching");
+
+                        double comparatorPercent = ImageComparator(rightInfoImage, leftInfoImage);
+
+                        mainForm.UpdateLabelPercentage(comparatorPercent.ToString() + "%");
+
+                        if (comparatorPercent >= comparisonRate)
+                        {
+                            mainForm.ShowButton();
+                            return true;
+                        }
                     }
                 }
-                mainForm.UpdateLabelNbImgScanned((startImage + i + 1).ToString());
+                mainForm.UpdateLabelNbImgScanned((i + 1).ToString() + " /" + listInfoImages.Count);
             }
+            return false;
         }
 
-        private string ImageComparator(InfoImage leftInfoImage, InfoImage rightInfoImage)
+        private double ImageComparator(InfoImage leftInfoImage, InfoImage rightInfoImage)
         {
             double equal = 0;
             double notequal = 0;
 
             Bitmap resizeRightInfoImage = ResizeBitmap(rightInfoImage.Bitmap, leftInfoImage.Bitmap.Height, leftInfoImage.Bitmap.Width);
-
-            Console.WriteLine(leftInfoImage.Name + " - " + rightInfoImage.Name);
-            Console.WriteLine(leftInfoImage.Bitmap.Width + " x " + leftInfoImage.Bitmap.Height);
-            Console.WriteLine(rightInfoImage.Bitmap.Width + " x " + rightInfoImage.Bitmap.Height + " --- " + resizeRightInfoImage.Width + " x " + resizeRightInfoImage.Height);
 
             for (int i = 0; i < leftInfoImage.Bitmap.Width; i++)
             {
@@ -87,20 +91,21 @@ namespace Dual_Image_Finder
 
             if (notequal == 0)
             {
-                return "100%";
-            } 
-            else if(equal == 0) {
-                return "0%";
+                return 100;
+            }
+            else if (equal == 0)
+            {
+                return 0;
             }
             else
             {
                 if (equal > notequal)
                 {
-                    return Convert.ToString(100 - ((notequal * 100) / equal)).Substring(0, 5) + "%";
+                    return Math.Floor(100 - ((notequal * 100) / equal));
                 }
                 else
                 {
-                    return Convert.ToString((equal * 100) / notequal).Substring(0, 5) + "%";
+                    return Math.Floor((equal * 100) / notequal);
                 }
             }
         }
@@ -113,6 +118,14 @@ namespace Dual_Image_Finder
                 graphics.DrawImage(bitmapEnter, 0, 0, resizeWidth, resizeHeight);
             }
             return resizeImage;
+        }
+
+        private InfoImage GetInfoImageBitmap(InfoImage infoImage)
+        {
+            Image imageRight = Image.FromFile(infoImage.Path);
+            InfoImage newInfoImage = infoImage;
+            newInfoImage.Bitmap = new Bitmap(imageRight);
+            return newInfoImage;
         }
     }
 }

@@ -28,7 +28,6 @@ namespace Dual_Image_Finder
 
                     for (int j = i + 1; j < listInfoImages.Count; j++)
                     {
-                        Console.WriteLine(i + " - " + j);
                         if (i <= startImage && j <= idRightImage)
                         {
                             j = idRightImage;

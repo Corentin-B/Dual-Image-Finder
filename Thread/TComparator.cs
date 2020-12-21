@@ -30,6 +30,7 @@ namespace Dual_Image_Finder
         private void StartComparator(List<InfoImage> listInfoImage)
         {
             bool loopControl = true;
+            List<InfoImage> listInfoImageIntern = listInfoImage;
 
             while (loopControl)
             {
@@ -37,17 +38,15 @@ namespace Dual_Image_Finder
                 {
                     //stop Thread and wait next iteration
                     mainForm.AutoEvent = new AutoResetEvent(false);
-                    Console.WriteLine("Before WaitOne");
                     mainForm.AutoEvent.WaitOne();
-                    Console.WriteLine("After WaitOne");
+
+                    listInfoImageIntern = UpdageList(listInfoImageIntern);
                 }
                 else
                 {
                     loopControl = false;
                 }
-                Console.WriteLine("Continue Thread");
             }
-
         }
 
         private bool LoopComparator(List<InfoImage> listInfoImage)
@@ -68,6 +67,25 @@ namespace Dual_Image_Finder
 
             Comparator comparator = new Comparator(mainForm);
             return comparator.ListImageComparator(listInfoImage, idLeftImage, idRightImage, comparisonRate);
+        }
+
+        private List<InfoImage> UpdageList(List<InfoImage> listInfoImage)
+        {
+            InfoImage updateLeftInfoImage = mainForm.LeftInfoImage;
+            InfoImage updateRightInfoImage = mainForm.RightInfoImage;
+            List<InfoImage> updateListInfoImage = listInfoImage;
+
+            if (updateLeftInfoImage.Deleted == true)
+            {
+                updateListInfoImage[updateListInfoImage.FindIndex(ind => ind.Name.Equals(updateLeftInfoImage.Name))] = updateLeftInfoImage;
+            }
+
+            if (updateRightInfoImage.Deleted == true)
+            {
+                updateListInfoImage[updateListInfoImage.FindIndex(ind => ind.Name.Equals(updateRightInfoImage.Name))] = updateRightInfoImage;
+            }
+
+            return updateListInfoImage;
         }
     }
 }

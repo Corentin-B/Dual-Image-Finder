@@ -1,14 +1,16 @@
-﻿using System.IO;
+﻿using Microsoft.VisualBasic.FileIO;
+using System;
+using System.IO;
 using System.Windows.Forms;
 
 namespace Dual_Image_Finder
 {
     class PopUpDelete
     {
-        public static void deleteImage(string ImagePath)
+        public void deleteImage(string ImagePath)
         {
             string message = "Voulez-vous supprimer cette image ?";
-            string caption = "Error Detected in Input";
+            string caption = "Confirmation de supression";
             MessageBoxButtons buttons = MessageBoxButtons.YesNo;
 
             DialogResult result = MessageBox.Show(message, caption, buttons);
@@ -17,8 +19,22 @@ namespace Dual_Image_Finder
             {
                 try
                 {
-                    File.Delete(ImagePath);
-                } catch (IOException)
+                    //File.Delete(ImagePath);
+                    FileSystem.DeleteFile(ImagePath, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    MessageBox.Show("Erreur : Accès non autorisé");
+                }
+                catch (PathTooLongException)
+                {
+                    MessageBox.Show("Erreur : Chemin trop long");
+                }
+                catch (DirectoryNotFoundException)
+                {
+                    MessageBox.Show("Erreur : Fichier introuvable");
+                }
+                catch (IOException)
                 {
                     MessageBox.Show("Erreur de suppresion de l'image");
                 }

@@ -33,6 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -47,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Comparator.cs" />
+    <Compile Include="MoveDeleteImage.cs" />
     <Compile Include="Thread\TComparator.cs" />
     <Compile Include="ImageFinder.cs" />
     <Compile Include="PopUpDelete.cs" />

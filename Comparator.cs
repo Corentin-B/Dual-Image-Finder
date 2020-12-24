@@ -22,7 +22,7 @@ namespace Dual_Image_Finder
             //Démarer la recherche en fonction des images actuelles
             for (int i = startImage; i < listInfoImages.Count; i++)
             {
-                if (!listInfoImages[i].Deleted)
+                if (!listInfoImages[i].DeletedOrMove)
                 {
                     InfoImage leftInfoImage = GetInfoImageBitmap(listInfoImages[i]);
 
@@ -37,7 +37,7 @@ namespace Dual_Image_Finder
                         {
                             continue;
                         }
-                        else if (listInfoImages[j].Deleted)
+                        else if (listInfoImages[j].DeletedOrMove)
                         {
                             continue;
                         }
@@ -54,7 +54,6 @@ namespace Dual_Image_Finder
 
                         if (comparatorPercent >= comparisonRate)
                         {
-                            mainForm.ShowButton();
                             return true;
                         }
                     }
@@ -121,9 +120,13 @@ namespace Dual_Image_Finder
 
         private InfoImage GetInfoImageBitmap(InfoImage infoImage)
         {
-            Image imageRight = Image.FromFile(infoImage.Path);
             InfoImage newInfoImage = infoImage;
-            newInfoImage.Bitmap = new Bitmap(imageRight);
+
+            using (var bmpTemp = new Bitmap(infoImage.Path))
+            {
+                newInfoImage.Bitmap = new Bitmap(bmpTemp);
+            }
+
             return newInfoImage;
         }
     }

@@ -1,5 +1,6 @@
 ﻿using Dual_Image_Finder.Models;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -24,6 +25,7 @@ namespace Dual_Image_Finder
         private delegate void SafeCallDelegateProgress(string value);
         private delegate void SafeCallDelegatePercentage(string value);
         private delegate void SafeCallDelegateButton();
+        private delegate void SafeCallDelegateRightImage();
 
 
         //TODO Déplacer les images dans un autre dossier "Duplicate"
@@ -71,7 +73,7 @@ namespace Dual_Image_Finder
             button_Start.Enabled = false;
             button_TargetFolder.Enabled = false;
 
-            TComparator tComparator = new TComparator(this, this.folderBrowserDialog_1.SelectedPath, percentSimilatiry);
+            TComparator tComparator = new TComparator(this, folderBrowserDialog_1.SelectedPath, percentSimilatiry, checkBox_Auto.Checked, radioButton_Delete.Checked);
             threadComparator = new Thread(tComparator.ThreadSupervisor);
             threadComparator.Start();
 
@@ -80,12 +82,9 @@ namespace Dual_Image_Finder
             label_text_ScannedImg.Visible = true;
         }
 
-        private void button_ImgLeftNext_Click(object sender, EventArgs e)
+        private void button_ImgNext_Click(object sender, EventArgs e)
         {
-            //Continue
-            //threadComparator.Resume();
-            autoEvent.Set();
-            resetFront();
+            Continue();
         }
 
         private void button_ImgLeftFolder_Click(object sender, EventArgs e)
@@ -96,16 +95,10 @@ namespace Dual_Image_Finder
         private void button_ImgLeftDelete_Click(object sender, EventArgs e)
         {
             //Set deleted to true in list
+            //pictureBox_left.BackgroundImage.Dispose();
             deleteFile(LeftInfoImage.Path);
-            LeftInfoImage.Deleted = true;
-        }
-
-        private void button_ImgRightNext_Click(object sender, EventArgs e)
-        {
-            //Continue
-            //threadComparator.Resume();
-            autoEvent.Set();
-            resetFront();
+            LeftInfoImage.DeletedOrMove = true;
+            Continue();
         }
 
         private void button_ImgRightFolder_Click(object sender, EventArgs e)
@@ -116,14 +109,36 @@ namespace Dual_Image_Finder
         private void button_ImgRightDelete_Click(object sender, EventArgs e)
         {
             //Set deleted to true in list
+            pictureBox_right.BackgroundImage.Dispose();
             deleteFile(RightInfoImage.Path);
-            RightInfoImage.Deleted = true;
+            RightInfoImage.DeletedOrMove = true;
+            Continue();
         }
 
         private void trackBar1_Scroll(object sender, EventArgs e)
         {
             label_percentsimilarity.Text = trackBar1.Value.ToString() + "%";
             percentSimilatiry = trackBar1.Value;
+        }
+
+        private void checkBox_Auto_CheckedChanged(object sender, EventArgs e)
+        {
+            radioButton_Move.Enabled = checkBox_Auto.Checked;
+            radioButton_Delete.Enabled = checkBox_Auto.Checked;
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (threadComparator.IsAlive)
+            {
+                threadComparator.Abort();
+            }
+        }
+
+        private void Continue()
+        {
+            autoEvent.Set();
+            resetFront();
         }
 
         #endregion
@@ -144,54 +159,38 @@ namespace Dual_Image_Finder
 
         private void deleteFile(string filePath)
         {
-            try
-            {
-                File.Delete(filePath);
-            }
-            catch (UnauthorizedAccessException)
-            {
-                MessageBox.Show("Erreur : Accès non autorisé");
-            }
-            catch (PathTooLongException)
-            {
-                MessageBox.Show("Erreur : Chemin trop long");
-            }
-            catch (DirectoryNotFoundException)
-            {
-                MessageBox.Show("Erreur : Fichier introuvable");
-            }
+            PopUpDelete popUpDelete = new PopUpDelete();
+            popUpDelete.deleteImage(filePath);
         }
 
         private void resetFront()
         {
-            button_ImgLeftNext.Enabled = false;
             button_ImgLeftFolder.Enabled = false;
             button_ImgLeftDelete.Enabled = false;
-            button_ImgLeftNext.Visible = false;
             button_ImgLeftFolder.Visible = false;
             button_ImgLeftDelete.Visible = false;
 
-            button_ImgRightNext.Enabled = false;
+            button_ImgNext.Enabled = false;
+            button_ImgNext.Visible = false;
+
             button_ImgRightFolder.Enabled = false;
             button_ImgRightDelete.Enabled = false;
-            button_ImgRightNext.Visible = false;
             button_ImgRightFolder.Visible = false;
             button_ImgRightDelete.Visible = false;
         }
 
         private void showFrontButton()
         {
-            button_ImgLeftNext.Enabled = true;
             button_ImgLeftFolder.Enabled = true;
             button_ImgLeftDelete.Enabled = true;
-            button_ImgLeftNext.Visible = true;
             button_ImgLeftFolder.Visible = true;
             button_ImgLeftDelete.Visible = true;
 
-            button_ImgRightNext.Enabled = true;
+            button_ImgNext.Enabled = true;
+            button_ImgNext.Visible = true;
+
             button_ImgRightFolder.Enabled = true;
             button_ImgRightDelete.Enabled = true;
-            button_ImgRightNext.Visible = true;
             button_ImgRightFolder.Visible = true;
             button_ImgRightDelete.Visible = true;
         }
@@ -223,10 +222,36 @@ namespace Dual_Image_Finder
             else
             {
                 label_percentage.Text = value;
-                pictureBox_left.BackgroundImage = Image.FromFile(LeftInfoImage.Path);
-                pictureBox_right.BackgroundImage = Image.FromFile(RightInfoImage.Path);
+                pictureBox_left.BackgroundImage = GetImageFromFile(LeftInfoImage.Path);
+                pictureBox_right.BackgroundImage = GetImageFromFile(RightInfoImage.Path);
                 label_text_DescImgLeft.Text = LeftInfoImage.Name;
                 label_text_DescImgRight.Text = RightInfoImage.Name;
+            }
+        }
+
+        private Bitmap GetImageFromFile(string imagePath)
+        {
+            Bitmap newImage;
+
+            using (var bmpTemp = new Bitmap(imagePath))
+            {
+                newImage = new Bitmap(bmpTemp);
+            }
+
+            return newImage;
+        }
+
+        public void RemoveRightImage()
+        {
+            if (pictureBox_right.InvokeRequired)
+            {
+                SafeCallDelegateRightImage d = new SafeCallDelegateRightImage(ShowButton);
+                pictureBox_right.Invoke(d, new object[] { });
+            }
+            else
+            {
+                pictureBox_right.BackgroundImage.Dispose();
+                this.Refresh();
             }
         }
 
@@ -244,5 +269,6 @@ namespace Dual_Image_Finder
         }
 
         #endregion
+
     }
 }

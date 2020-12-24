@@ -1,5 +1,4 @@
 ﻿using Dual_Image_Finder.Models;
-using System;
 using System.Collections.Generic;
 using System.Threading;
 
@@ -10,12 +9,16 @@ namespace Dual_Image_Finder
         private string folderPath;
         private readonly MainForm mainForm;
         private int comparisonRate;
+        private bool auto;
+        private bool deleteRequire;
 
-        public TComparator(MainForm mainForm, string folderPath, int comparisonRate)
+        public TComparator(MainForm mainForm, string folderPath, int comparisonRate, bool auto, bool deleteRequire)
         {
             this.mainForm = mainForm;
             this.folderPath = folderPath;
             this.comparisonRate = comparisonRate;
+            this.auto = auto;
+            this.deleteRequire = deleteRequire;
         }
 
         public void ThreadSupervisor()
@@ -36,11 +39,18 @@ namespace Dual_Image_Finder
             {
                 if (LoopComparator(listInfoImage))
                 {
-                    //stop Thread and wait next iteration
-                    mainForm.AutoEvent = new AutoResetEvent(false);
-                    mainForm.AutoEvent.WaitOne();
-
-                    listInfoImageIntern = UpdageList(listInfoImageIntern);
+                    if (auto)
+                    {
+                        AutoMoveOrDelete();
+                    }
+                    else
+                    {
+                        mainForm.ShowButton();
+                        //stop Thread and wait next iteration
+                        mainForm.AutoEvent = new AutoResetEvent(false);
+                        mainForm.AutoEvent.WaitOne();
+                    }
+                    listInfoImageIntern = UpdateList(listInfoImageIntern);
                 }
                 else
                 {
@@ -69,23 +79,44 @@ namespace Dual_Image_Finder
             return comparator.ListImageComparator(listInfoImage, idLeftImage, idRightImage, comparisonRate);
         }
 
-        private List<InfoImage> UpdageList(List<InfoImage> listInfoImage)
+        private List<InfoImage> UpdateList(List<InfoImage> listInfoImage)
         {
             InfoImage updateLeftInfoImage = mainForm.LeftInfoImage;
             InfoImage updateRightInfoImage = mainForm.RightInfoImage;
             List<InfoImage> updateListInfoImage = listInfoImage;
 
-            if (updateLeftInfoImage.Deleted == true)
+            if (updateLeftInfoImage.DeletedOrMove == true)
             {
                 updateListInfoImage[updateListInfoImage.FindIndex(ind => ind.Name.Equals(updateLeftInfoImage.Name))] = updateLeftInfoImage;
             }
 
-            if (updateRightInfoImage.Deleted == true)
+            if (updateRightInfoImage.DeletedOrMove == true)
             {
                 updateListInfoImage[updateListInfoImage.FindIndex(ind => ind.Name.Equals(updateRightInfoImage.Name))] = updateRightInfoImage;
             }
 
             return updateListInfoImage;
+        }
+
+        private void AutoMoveOrDelete()
+        {
+            MoveDeleteImage moveDeleteImage = new MoveDeleteImage();
+            if (deleteRequire)
+            {
+                mainForm.RemoveRightImage();
+                mainForm.RightInfoImage.Bitmap = null;
+
+                moveDeleteImage.DeleteImage(mainForm.RightInfoImage.Path);
+                mainForm.RightInfoImage.DeletedOrMove = true;
+            }
+            else
+            {
+                mainForm.RemoveRightImage();
+                mainForm.RightInfoImage.Bitmap = null;
+
+                moveDeleteImage.MoveImage(mainForm.RightInfoImage.Path, folderPath, mainForm.RightInfoImage.Name);
+                mainForm.RightInfoImage.DeletedOrMove = true;
+            }
         }
     }
 }

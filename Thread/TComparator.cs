@@ -26,18 +26,19 @@ namespace Dual_Image_Finder
             ImageFinder imageFinder = new ImageFinder();
             List<InfoImage> listInfoImage = imageFinder.GetImagesInFolder(folderPath);
 
-            StartComparator(listInfoImage);
-            mainForm.LeftInfoImage = listInfoImage[0];
+            LoopComparator(listInfoImage);
+
+            mainForm.ShowStartButton();
         }
 
-        private void StartComparator(List<InfoImage> listInfoImage)
+        private void LoopComparator(List<InfoImage> listInfoImage)
         {
             bool loopControl = true;
             List<InfoImage> listInfoImageIntern = listInfoImage;
 
             while (loopControl)
             {
-                if (LoopComparator(listInfoImage))
+                if (StartComparator(listInfoImage))
                 {
                     if (auto)
                     {
@@ -45,10 +46,7 @@ namespace Dual_Image_Finder
                     }
                     else
                     {
-                        mainForm.ShowButton();
-                        //stop Thread and wait next iteration
-                        mainForm.AutoEvent = new AutoResetEvent(false);
-                        mainForm.AutoEvent.WaitOne();
+                        WaitUser();
                     }
                     listInfoImageIntern = UpdateList(listInfoImageIntern);
                 }
@@ -59,7 +57,7 @@ namespace Dual_Image_Finder
             }
         }
 
-        private bool LoopComparator(List<InfoImage> listInfoImage)
+        private bool StartComparator(List<InfoImage> listInfoImage)
         {
             int idLeftImage = 0;
             int idRightImage = 0;
@@ -87,12 +85,14 @@ namespace Dual_Image_Finder
 
             if (updateLeftInfoImage.DeletedOrMove == true)
             {
-                updateListInfoImage[updateListInfoImage.FindIndex(ind => ind.Name.Equals(updateLeftInfoImage.Name))] = updateLeftInfoImage;
+                int idLeftImage = listInfoImage.FindIndex(image => image.Name.Equals(updateLeftInfoImage.Name));
+                updateListInfoImage.RemoveAt(idLeftImage);
             }
 
             if (updateRightInfoImage.DeletedOrMove == true)
             {
-                updateListInfoImage[updateListInfoImage.FindIndex(ind => ind.Name.Equals(updateRightInfoImage.Name))] = updateRightInfoImage;
+                int idRightImage = listInfoImage.FindIndex(image => image.Name.Equals(updateRightInfoImage.Name));
+                updateListInfoImage.RemoveAt(idRightImage);
             }
 
             return updateListInfoImage;
@@ -117,6 +117,14 @@ namespace Dual_Image_Finder
                 moveDeleteImage.MoveImage(mainForm.RightInfoImage.Path, folderPath, mainForm.RightInfoImage.Name);
                 mainForm.RightInfoImage.DeletedOrMove = true;
             }
+        }
+
+        private void WaitUser()
+        {
+            mainForm.ShowButton();
+            //stop Thread and wait next iteration
+            mainForm.AutoEvent = new AutoResetEvent(false);
+            mainForm.AutoEvent.WaitOne();
         }
     }
 }

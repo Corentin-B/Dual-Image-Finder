@@ -26,9 +26,8 @@ namespace Dual_Image_Finder
         private delegate void SafeCallDelegatePercentage(string value);
         private delegate void SafeCallDelegateButton();
         private delegate void SafeCallDelegateRightImage();
+        private delegate void SafeCallDelegateButtonStart();
 
-
-        //TODO Déplacer les images dans un autre dossier "Duplicate"
 
         public MainForm()
         {
@@ -95,7 +94,6 @@ namespace Dual_Image_Finder
         private void button_ImgLeftDelete_Click(object sender, EventArgs e)
         {
             //Set deleted to true in list
-            //pictureBox_left.BackgroundImage.Dispose();
             deleteFile(LeftInfoImage.Path);
             LeftInfoImage.DeletedOrMove = true;
             Continue();
@@ -129,7 +127,7 @@ namespace Dual_Image_Finder
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (threadComparator.IsAlive)
+            if (threadComparator != null && threadComparator.IsAlive)
             {
                 threadComparator.Abort();
             }
@@ -193,6 +191,17 @@ namespace Dual_Image_Finder
             button_ImgRightDelete.Enabled = true;
             button_ImgRightFolder.Visible = true;
             button_ImgRightDelete.Visible = true;
+        }
+
+        private void ComparatorEnd()
+        {
+            button_Start.Enabled = true;
+            button_TargetFolder.Enabled = true;
+            groupBox_WhenFind.Enabled = true;
+            label_percentage.Text = "Fin";
+            pictureBox_left.BackgroundImage.Dispose();
+            pictureBox_right.BackgroundImage.Dispose();
+            openFolder(LeftInfoImage.Path);
         }
 
         #endregion
@@ -265,6 +274,19 @@ namespace Dual_Image_Finder
             else
             {
                 showFrontButton();
+            }
+        }
+
+        public void ShowStartButton()
+        {
+            if (button_ImgLeftDelete.InvokeRequired)
+            {
+                SafeCallDelegateButtonStart d = new SafeCallDelegateButtonStart(ShowStartButton);
+                button_ImgLeftDelete.Invoke(d, new object[] { });
+            }
+            else
+            {
+                ComparatorEnd();
             }
         }
 

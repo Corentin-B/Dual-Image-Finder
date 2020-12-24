@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic.FileIO;
+using System;
 using System.IO;
 using System.Windows.Forms;
 
@@ -39,7 +40,7 @@ namespace Dual_Image_Finder
         {
             try
             {
-                File.Delete(imagePath);
+                FileSystem.DeleteFile(imagePath, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
             }
             catch (UnauthorizedAccessException)
             {

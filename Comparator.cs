@@ -19,7 +19,6 @@ namespace Dual_Image_Finder
             int startImage = idLeftImage;
             mainForm.UpdateLabelNbImgScanned((startImage + 1).ToString() + " /" + listInfoImages.Count);
 
-            //Démarer la recherche en fonction des images actuelles
             for (int i = startImage; i < listInfoImages.Count; i++)
             {
                 if (!listInfoImages[i].DeletedOrMove)
@@ -33,20 +32,14 @@ namespace Dual_Image_Finder
                             j = idRightImage;
                             continue;
                         }
-                        else if (i == j)
-                        {
-                            continue;
-                        }
-                        else if (listInfoImages[j].DeletedOrMove)
+                        else if (i == j || listInfoImages[j].DeletedOrMove)
                         {
                             continue;
                         }
 
                         InfoImage rightInfoImage = GetInfoImageBitmap(listInfoImages[j]);
 
-                        mainForm.LeftInfoImage = listInfoImages[i];
-                        mainForm.RightInfoImage = listInfoImages[j];
-                        mainForm.UpdateLabelPercentage("Searching");
+                        updateSearching(listInfoImages[i], listInfoImages[j]);
 
                         double comparatorPercent = ImageComparator(rightInfoImage, leftInfoImage);
 
@@ -128,6 +121,13 @@ namespace Dual_Image_Finder
             }
 
             return newInfoImage;
+        }
+
+        private void updateSearching(InfoImage leftInfoImage, InfoImage rightInfoImage)
+        {
+            mainForm.LeftInfoImage = leftInfoImage;
+            mainForm.RightInfoImage = rightInfoImage;
+            mainForm.UpdateLabelPercentage("Searching");
         }
     }
 }

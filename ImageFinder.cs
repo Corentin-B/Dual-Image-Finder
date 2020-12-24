@@ -8,7 +8,7 @@ namespace Dual_Image_Finder
     {
         public List<InfoImage> GetImagesInFolder(string pathFolder)
         {
-            string[] fileInFolder = Directory.GetFiles(pathFolder, "*.*g", SearchOption.AllDirectories);
+            string[] fileInFolder = Directory.GetFiles(pathFolder, "*.*g", SearchOption.TopDirectoryOnly);
             List<InfoImage> listInfoImages = new List<InfoImage>();
 
             foreach (string file in fileInFolder)

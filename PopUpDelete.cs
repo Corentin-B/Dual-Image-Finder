@@ -7,7 +7,7 @@ namespace Dual_Image_Finder
 {
     class PopUpDelete
     {
-        public void deleteImage(string ImagePath)
+        public void deleteImage(string imagePath)
         {
             string message = "Voulez-vous supprimer cette image ?";
             string caption = "Confirmation de supression";
@@ -19,8 +19,7 @@ namespace Dual_Image_Finder
             {
                 try
                 {
-                    //File.Delete(ImagePath);
-                    FileSystem.DeleteFile(ImagePath, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+                    FileSystem.DeleteFile(imagePath, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
                 }
                 catch (UnauthorizedAccessException)
                 {

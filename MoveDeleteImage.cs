@@ -20,19 +20,19 @@ namespace Dual_Image_Finder
             }
             catch (UnauthorizedAccessException)
             {
-                MessageBox.Show("Erreur : Accès non autorisé");
+                MessageBox.Show("Error: Unauthorized access");
             }
             catch (PathTooLongException)
             {
-                MessageBox.Show("Erreur : Chemin trop long");
+                MessageBox.Show("Error: Path too long");
             }
             catch (DirectoryNotFoundException)
             {
-                MessageBox.Show("Erreur : Fichier introuvable");
+                MessageBox.Show("Error: File not found");
             }
-            catch (IOException e)
+            catch (IOException)
             {
-                MessageBox.Show("Erreur pour déplacer l'image" + "\n" + e);
+                MessageBox.Show("Image moving error");
             }
         }
 
@@ -44,19 +44,19 @@ namespace Dual_Image_Finder
             }
             catch (UnauthorizedAccessException)
             {
-                MessageBox.Show("Erreur : Accès non autorisé");
+                MessageBox.Show("Error: Unauthorized access");
             }
             catch (PathTooLongException)
             {
-                MessageBox.Show("Erreur : Chemin trop long");
+                MessageBox.Show("Error: Path too long");
             }
             catch (DirectoryNotFoundException)
             {
-                MessageBox.Show("Erreur : Fichier introuvable");
+                MessageBox.Show("Error: File not found");
             }
             catch (IOException)
             {
-                MessageBox.Show("Erreur de suppresion de l'image");
+                MessageBox.Show("Image deletion error");
             }
         }
     }

@@ -67,10 +67,6 @@
             this.textBox_1.Size = new System.Drawing.Size(388, 20);
             this.textBox_1.TabIndex = 0;
             // 
-            // folderBrowserDialog_1
-            // 
-            this.folderBrowserDialog_1.RootFolder = System.Environment.SpecialFolder.MyPictures;
-            // 
             // button_TargetFolder
             // 
             this.button_TargetFolder.BackColor = System.Drawing.Color.Transparent;
@@ -83,7 +79,7 @@
             this.button_TargetFolder.Name = "button_TargetFolder";
             this.button_TargetFolder.Size = new System.Drawing.Size(185, 23);
             this.button_TargetFolder.TabIndex = 2;
-            this.button_TargetFolder.Text = "Emplacement du dossier cible";
+            this.button_TargetFolder.Text = "Target folder location";
             this.button_TargetFolder.UseVisualStyleBackColor = false;
             this.button_TargetFolder.Click += new System.EventHandler(this.button_targetFolder_Click);
             // 
@@ -116,7 +112,7 @@
             this.label_text_TitleImgLeft.Name = "label_text_TitleImgLeft";
             this.label_text_TitleImgLeft.Size = new System.Drawing.Size(340, 13);
             this.label_text_TitleImgLeft.TabIndex = 5;
-            this.label_text_TitleImgLeft.Text = "Image référente";
+            this.label_text_TitleImgLeft.Text = "Referent Image";
             this.label_text_TitleImgLeft.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label_text_TitleImgRight
@@ -128,7 +124,7 @@
             this.label_text_TitleImgRight.Name = "label_text_TitleImgRight";
             this.label_text_TitleImgRight.Size = new System.Drawing.Size(340, 13);
             this.label_text_TitleImgRight.TabIndex = 6;
-            this.label_text_TitleImgRight.Text = "Image cible";
+            this.label_text_TitleImgRight.Text = "Target image";
             this.label_text_TitleImgRight.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label_text_DescImgLeft
@@ -249,7 +245,7 @@
             this.label_text_ScannedImg.Name = "label_text_ScannedImg";
             this.label_text_ScannedImg.Size = new System.Drawing.Size(68, 43);
             this.label_text_ScannedImg.TabIndex = 15;
-            this.label_text_ScannedImg.Text = "Image scannées";
+            this.label_text_ScannedImg.Text = "Scanned image";
             this.label_text_ScannedImg.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label_NbImgScanned
@@ -277,7 +273,7 @@
             this.button_Start.Name = "button_Start";
             this.button_Start.Size = new System.Drawing.Size(68, 23);
             this.button_Start.TabIndex = 17;
-            this.button_Start.Text = "Démarrer";
+            this.button_Start.Text = "Start";
             this.button_Start.UseVisualStyleBackColor = false;
             this.button_Start.Click += new System.EventHandler(this.button_Start_Click);
             // 
@@ -341,9 +337,9 @@
             this.checkBox_Auto.AutoSize = true;
             this.checkBox_Auto.Location = new System.Drawing.Point(6, 20);
             this.checkBox_Auto.Name = "checkBox_Auto";
-            this.checkBox_Auto.Size = new System.Drawing.Size(96, 17);
+            this.checkBox_Auto.Size = new System.Drawing.Size(82, 17);
             this.checkBox_Auto.TabIndex = 2;
-            this.checkBox_Auto.Text = "Automatique";
+            this.checkBox_Auto.Text = "Automatic";
             this.checkBox_Auto.UseVisualStyleBackColor = true;
             this.checkBox_Auto.CheckedChanged += new System.EventHandler(this.checkBox_Auto_CheckedChanged);
             // 
@@ -353,9 +349,9 @@
             this.radioButton_Delete.Enabled = false;
             this.radioButton_Delete.Location = new System.Drawing.Point(6, 66);
             this.radioButton_Delete.Name = "radioButton_Delete";
-            this.radioButton_Delete.Size = new System.Drawing.Size(81, 17);
+            this.radioButton_Delete.Size = new System.Drawing.Size(93, 17);
             this.radioButton_Delete.TabIndex = 1;
-            this.radioButton_Delete.Text = "Supprimer";
+            this.radioButton_Delete.Text = "Recycle Bin";
             this.radioButton_Delete.UseVisualStyleBackColor = true;
             // 
             // radioButton_Move
@@ -365,10 +361,10 @@
             this.radioButton_Move.Enabled = false;
             this.radioButton_Move.Location = new System.Drawing.Point(6, 43);
             this.radioButton_Move.Name = "radioButton_Move";
-            this.radioButton_Move.Size = new System.Drawing.Size(76, 17);
+            this.radioButton_Move.Size = new System.Drawing.Size(56, 17);
             this.radioButton_Move.TabIndex = 0;
             this.radioButton_Move.TabStop = true;
-            this.radioButton_Move.Text = "Déplacer";
+            this.radioButton_Move.Text = "Move";
             this.radioButton_Move.UseVisualStyleBackColor = true;
             // 
             // MainForm

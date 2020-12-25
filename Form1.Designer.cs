@@ -67,6 +67,10 @@
             this.textBox_1.Size = new System.Drawing.Size(388, 20);
             this.textBox_1.TabIndex = 0;
             // 
+            // folderBrowserDialog_1
+            // 
+            this.folderBrowserDialog_1.RootFolder = System.Environment.SpecialFolder.MyPictures;
+            // 
             // button_TargetFolder
             // 
             this.button_TargetFolder.BackColor = System.Drawing.Color.Transparent;

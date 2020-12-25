@@ -17,26 +17,8 @@ namespace Dual_Image_Finder
 
             if (result == DialogResult.Yes)
             {
-                try
-                {
-                    FileSystem.DeleteFile(imagePath, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
-                }
-                catch (UnauthorizedAccessException)
-                {
-                    MessageBox.Show("Erreur : Accès non autorisé");
-                }
-                catch (PathTooLongException)
-                {
-                    MessageBox.Show("Erreur : Chemin trop long");
-                }
-                catch (DirectoryNotFoundException)
-                {
-                    MessageBox.Show("Erreur : Fichier introuvable");
-                }
-                catch (IOException)
-                {
-                    MessageBox.Show("Erreur de suppresion de l'image");
-                }
+                MoveDeleteImage moveDeleteImage = new MoveDeleteImage();
+                moveDeleteImage.DeleteImage(imagePath);
             }
         }
     }

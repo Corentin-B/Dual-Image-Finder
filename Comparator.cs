@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace Dual_Image_Finder
 {
@@ -17,41 +18,39 @@ namespace Dual_Image_Finder
         public bool ListImageComparator(List<InfoImage> listInfoImages, int idLeftImage, int idRightImage, int comparisonRate)
         {
             int startImage = idLeftImage;
-            mainForm.UpdateLabelNbImgScanned((startImage + 1).ToString() + " /" + listInfoImages.Count);
+            mainForm.UpdateLabelNbImgScanned((startImage + 1).ToString() + " / " + listInfoImages.Count);
 
             for (int i = startImage; i < listInfoImages.Count; i++)
             {
-                if (!listInfoImages[i].DeletedOrMove)
+                InfoImage leftInfoImage = GetInfoImageBitmap(listInfoImages[i]);
+
+                for (int j = i + 1; j < listInfoImages.Count; j++)
                 {
-                    InfoImage leftInfoImage = GetInfoImageBitmap(listInfoImages[i]);
-
-                    for (int j = i + 1; j < listInfoImages.Count; j++)
+                    if (i <= startImage && j <= idRightImage)
                     {
-                        if (i <= startImage && j <= idRightImage)
-                        {
-                            j = idRightImage;
-                            continue;
-                        }
-                        else if (i == j || listInfoImages[j].DeletedOrMove)
-                        {
-                            continue;
-                        }
+                        j = idRightImage;
+                        continue;
+                    }
+                    else if (i == j)
+                    {
+                        continue;
+                    }
 
-                        InfoImage rightInfoImage = GetInfoImageBitmap(listInfoImages[j]);
+                    InfoImage rightInfoImage = GetInfoImageBitmap(listInfoImages[j]);
 
-                        UpdateSearching(listInfoImages[i], listInfoImages[j]);
+                    UpdateSearching(listInfoImages[i], listInfoImages[j]);
 
-                        double comparatorPercent = ImageComparator(rightInfoImage, leftInfoImage);
+                    double comparatorPercent = ImageComparator(leftInfoImage, rightInfoImage);
 
-                        mainForm.UpdateLabelPercentage(comparatorPercent.ToString() + "%");
+                    mainForm.UpdateLabelPercentage(comparatorPercent.ToString() + "%");
 
-                        if (comparatorPercent >= comparisonRate)
-                        {
-                            return true;
-                        }
+                    if (comparatorPercent >= comparisonRate)
+                    {
+                        return true;
                     }
                 }
-                mainForm.UpdateLabelNbImgScanned((i + 1).ToString() + " /" + listInfoImages.Count);
+
+                mainForm.UpdateLabelNbImgScanned((i + 1).ToString() + " / " + listInfoImages.Count);
             }
             return false;
         }
@@ -63,12 +62,15 @@ namespace Dual_Image_Finder
 
             Bitmap resizeRightInfoImage = ResizeBitmap(rightInfoImage.Bitmap, leftInfoImage.Bitmap.Height, leftInfoImage.Bitmap.Width);
 
+            //TODO stream (Enumerable) ?
+
             for (int i = 0; i < leftInfoImage.Bitmap.Width; i++)
             {
                 for (int j = 0; j < leftInfoImage.Bitmap.Height; j++)
                 {
                     string pixelLeft = leftInfoImage.Bitmap.GetPixel(i, j).Name.ToString();
                     string pixelRight = resizeRightInfoImage.GetPixel(i, j).Name.ToString();
+
                     if (pixelLeft == pixelRight)
                     {
                         equal++;
@@ -80,24 +82,13 @@ namespace Dual_Image_Finder
                 }
             }
 
-            if (notequal == 0)
-            {
-                return 100;
-            }
-            else if (equal == 0)
+            if (equal == 0)
             {
                 return 0;
             }
             else
             {
-                if (equal > notequal)
-                {
-                    return Math.Floor(100 - ((notequal * 100) / equal));
-                }
-                else
-                {
-                    return Math.Floor((equal * 100) / notequal);
-                }
+                return Math.Floor((equal / (equal + notequal))* 100);
             }
         }
 
@@ -108,6 +99,7 @@ namespace Dual_Image_Finder
             {
                 graphics.DrawImage(bitmapEnter, 0, 0, resizeWidth, resizeHeight);
             }
+
             return resizeImage;
         }
 

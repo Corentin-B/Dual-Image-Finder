@@ -15,9 +15,8 @@ namespace Dual_Image_Finder
             {
                 string name = Path.GetFileName(file);
                 string path = file;
-                bool deleted = false;
 
-                InfoImage infoImage = new InfoImage(name, path, deleted); ;
+                InfoImage infoImage = new InfoImage(name, path);
 
                 listInfoImages.Add(infoImage);
             }

@@ -24,9 +24,11 @@ namespace Dual_Image_Finder
 
         public void ThreadSupervisor()
         {
+            //static
             ImageFinder imageFinder = new ImageFinder();
             List<InfoImage> listInfoImage = imageFinder.GetImagesInFolder(folderPath);
 
+            //Is empty ?
             if(listInfoImage.Count == 0)
             {
                 mainForm.NoImageFind();
@@ -45,7 +47,7 @@ namespace Dual_Image_Finder
 
             while (loopControl)
             {
-                if (StartComparator(listInfoImage))
+                if (StartComparator(listInfoImageIntern))
                 {
                     if (auto)
                     {

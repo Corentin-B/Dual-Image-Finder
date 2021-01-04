@@ -17,5 +17,12 @@ namespace Dual_Image_Finder.Models
             Path = path;
             DeletedOrMove = deleted;
         }
+
+        public InfoImage(string name, string path)
+        {
+            Name = name;
+            Path = path;
+            DeletedOrMove = false;
+        }
     }
 }

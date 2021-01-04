@@ -39,7 +39,7 @@ namespace Dual_Image_Finder
 
                         InfoImage rightInfoImage = GetInfoImageBitmap(listInfoImages[j]);
 
-                        updateSearching(listInfoImages[i], listInfoImages[j]);
+                        UpdateSearching(listInfoImages[i], listInfoImages[j]);
 
                         double comparatorPercent = ImageComparator(rightInfoImage, leftInfoImage);
 
@@ -123,7 +123,7 @@ namespace Dual_Image_Finder
             return newInfoImage;
         }
 
-        private void updateSearching(InfoImage leftInfoImage, InfoImage rightInfoImage)
+        private void UpdateSearching(InfoImage leftInfoImage, InfoImage rightInfoImage)
         {
             mainForm.LeftInfoImage = leftInfoImage;
             mainForm.RightInfoImage = rightInfoImage;

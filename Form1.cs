@@ -27,6 +27,7 @@ namespace Dual_Image_Finder
         private delegate void SafeCallDelegateButton();
         private delegate void SafeCallDelegateRightImage();
         private delegate void SafeCallDelegateButtonStart();
+        private delegate void SafeCallDelegateNoImageFind();
 
 
         public MainForm()
@@ -151,7 +152,7 @@ namespace Dual_Image_Finder
             }
             catch (FileNotFoundException)
             {
-                MessageBox.Show("Erreur : Impossible d'ouvrir le dossier");
+                MessageBox.Show("Error: Unable to open folder");
             }
         }
 
@@ -202,6 +203,14 @@ namespace Dual_Image_Finder
             pictureBox_left.BackgroundImage.Dispose();
             pictureBox_right.BackgroundImage.Dispose();
             openFolder(LeftInfoImage.Path);
+        }
+
+        private void ComparatorNoFind()
+        {
+            button_Start.Enabled = true;
+            button_TargetFolder.Enabled = true;
+            groupBox_WhenFind.Enabled = true;
+            label_percentage.Text = "0 Images Find";
         }
 
         #endregion
@@ -287,6 +296,19 @@ namespace Dual_Image_Finder
             else
             {
                 ComparatorEnd();
+            }
+        }
+
+        public void NoImageFind()
+        {
+            if (button_ImgLeftDelete.InvokeRequired)
+            {
+                SafeCallDelegateNoImageFind d = new SafeCallDelegateNoImageFind(NoImageFind);
+                button_ImgLeftDelete.Invoke(d, new object[] { });
+            }
+            else
+            {
+                ComparatorNoFind();
             }
         }
 

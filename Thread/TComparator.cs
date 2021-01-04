@@ -1,6 +1,7 @@
 ﻿using Dual_Image_Finder.Models;
 using System.Collections.Generic;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace Dual_Image_Finder
 {
@@ -25,6 +26,12 @@ namespace Dual_Image_Finder
         {
             ImageFinder imageFinder = new ImageFinder();
             List<InfoImage> listInfoImage = imageFinder.GetImagesInFolder(folderPath);
+
+            if(listInfoImage.Count == 0)
+            {
+                mainForm.NoImageFind();
+                return;
+            }
 
             LoopComparator(listInfoImage);
 

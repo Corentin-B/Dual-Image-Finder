@@ -289,13 +289,12 @@ namespace Dual_Image_Finder
         {
             if (pictureBox_right.InvokeRequired)
             {
-                SafeCallDelegateRightImage d = new SafeCallDelegateRightImage(ShowButton);
+                SafeCallDelegateRightImage d = new SafeCallDelegateRightImage(RemoveRightImage);
                 pictureBox_right.Invoke(d, new object[] { });
             }
             else
             {
                 pictureBox_right.BackgroundImage.Dispose();
-                this.Refresh();
             }
         }
 

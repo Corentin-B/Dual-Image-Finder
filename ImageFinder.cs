@@ -6,7 +6,7 @@ namespace Dual_Image_Finder
 {
     class ImageFinder
     {
-        public List<InfoImage> GetImagesInFolder(string pathFolder)
+        public static List<InfoImage> GetImagesInFolder(string pathFolder)
         {
             string[] fileInFolder = Directory.GetFiles(pathFolder, "*.*g", SearchOption.TopDirectoryOnly);
             List<InfoImage> listInfoImages = new List<InfoImage>();

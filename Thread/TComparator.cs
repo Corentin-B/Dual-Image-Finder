@@ -1,43 +1,31 @@
 ﻿using Dual_Image_Finder.Models;
 using System.Collections.Generic;
 using System.Threading;
-using System.Windows.Forms;
 
 namespace Dual_Image_Finder
 {
     class TComparator
     {
-        private string folderPath;
-        private readonly MainForm mainForm;
-        private int comparisonRate;
-        private bool auto;
-        private bool deleteRequire;
+        private ImageParameters imageParameters;
 
-        public TComparator(MainForm mainForm, string folderPath, int comparisonRate, bool auto, bool deleteRequire)
+        public TComparator(ImageParameters imageParameters)
         {
-            this.mainForm = mainForm;
-            this.folderPath = folderPath;
-            this.comparisonRate = comparisonRate;
-            this.auto = auto;
-            this.deleteRequire = deleteRequire;
+            this.imageParameters = imageParameters;
         }
 
         public void ThreadSupervisor()
         {
-            //static
-            ImageFinder imageFinder = new ImageFinder();
-            List<InfoImage> listInfoImage = imageFinder.GetImagesInFolder(folderPath);
+            List<InfoImage> listInfoImage = ImageFinder.GetImagesInFolder(imageParameters.FolderPath);
 
-            //Is empty ?
-            if(listInfoImage.Count == 0)
+            if (listInfoImage.Count == 0)
             {
-                mainForm.NoImageFind();
+                imageParameters.MainForm.NoImageFind();
                 return;
             }
 
             LoopComparator(listInfoImage);
 
-            mainForm.ShowStartButton();
+            imageParameters.MainForm.ShowStartButton();
         }
 
         private void LoopComparator(List<InfoImage> listInfoImage)
@@ -49,7 +37,7 @@ namespace Dual_Image_Finder
             {
                 if (StartComparator(listInfoImageIntern))
                 {
-                    if (auto)
+                    if (imageParameters.Auto)
                     {
                         AutoMoveOrDelete();
                     }
@@ -71,25 +59,25 @@ namespace Dual_Image_Finder
             int idLeftImage = 0;
             int idRightImage = 0;
 
-            if (mainForm.LeftInfoImage != null)
+            if (imageParameters.MainForm.LeftInfoImage != null)
             {
-                InfoImage compareLeftInfoImage = mainForm.LeftInfoImage;
+                InfoImage compareLeftInfoImage = imageParameters.MainForm.LeftInfoImage;
                 idLeftImage = listInfoImage.FindIndex(image => image.Name.Equals(compareLeftInfoImage.Name));
             }
-            if (mainForm.RightInfoImage != null)
+            if (imageParameters.MainForm.RightInfoImage != null)
             {
-                InfoImage compareRightInfoImage = mainForm.RightInfoImage;
+                InfoImage compareRightInfoImage = imageParameters.MainForm.RightInfoImage;
                 idRightImage = listInfoImage.FindIndex(image => image.Name.Equals(compareRightInfoImage.Name));
             }
 
-            Comparator comparator = new Comparator(mainForm);
-            return comparator.ListImageComparator(listInfoImage, idLeftImage, idRightImage, comparisonRate);
+            Comparator comparator = new Comparator(imageParameters.MainForm);
+            return comparator.ListImageComparator(listInfoImage, idLeftImage, idRightImage, imageParameters.ComparisonRate);
         }
 
         private List<InfoImage> UpdateList(List<InfoImage> listInfoImage)
         {
-            InfoImage updateLeftInfoImage = mainForm.LeftInfoImage;
-            InfoImage updateRightInfoImage = mainForm.RightInfoImage;
+            InfoImage updateLeftInfoImage = imageParameters.MainForm.LeftInfoImage;
+            InfoImage updateRightInfoImage = imageParameters.MainForm.RightInfoImage;
             List<InfoImage> updateListInfoImage = listInfoImage;
 
             if (updateLeftInfoImage.DeletedOrMove == true)
@@ -110,30 +98,30 @@ namespace Dual_Image_Finder
         private void AutoMoveOrDelete()
         {
             MoveDeleteImage moveDeleteImage = new MoveDeleteImage();
-            if (deleteRequire)
+            if (imageParameters.DeleteRequire)
             {
-                mainForm.RemoveRightImage();
-                mainForm.RightInfoImage.Bitmap = null;
+                imageParameters.MainForm.RemoveRightImage();
+                imageParameters.MainForm.RightInfoImage.Bitmap = null;
 
-                moveDeleteImage.DeleteImage(mainForm.RightInfoImage.Path);
-                mainForm.RightInfoImage.DeletedOrMove = true;
+                moveDeleteImage.DeleteImage(imageParameters.MainForm.RightInfoImage.Path);
+                imageParameters.MainForm.RightInfoImage.DeletedOrMove = true;
             }
             else
             {
-                mainForm.RemoveRightImage();
-                mainForm.RightInfoImage.Bitmap = null;
+                imageParameters.MainForm.RemoveRightImage();
+                imageParameters.MainForm.RightInfoImage.Bitmap = null;
 
-                moveDeleteImage.MoveImage(mainForm.RightInfoImage.Path, folderPath, mainForm.RightInfoImage.Name);
-                mainForm.RightInfoImage.DeletedOrMove = true;
+                moveDeleteImage.MoveImage(imageParameters.MainForm.RightInfoImage.Path, imageParameters.FolderPath, imageParameters.MainForm.RightInfoImage.Name);
+                imageParameters.MainForm.RightInfoImage.DeletedOrMove = true;
             }
         }
 
         private void WaitUser()
         {
-            mainForm.ShowButton();
+            imageParameters.MainForm.ShowButton();
             //stop Thread and wait next iteration
-            mainForm.AutoEvent = new AutoResetEvent(false);
-            mainForm.AutoEvent.WaitOne();
+            imageParameters.MainForm.AutoEvent = new AutoResetEvent(false);
+            imageParameters.MainForm.AutoEvent.WaitOne();
         }
     }
 }

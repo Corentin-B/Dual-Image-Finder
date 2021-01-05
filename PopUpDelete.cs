@@ -9,8 +9,8 @@ namespace Dual_Image_Finder
     {
         public void deleteImage(string imagePath)
         {
-            string message = "Voulez-vous supprimer cette image ?";
-            string caption = "Confirmation de supression";
+            string message = "Do you want to delete this image?";
+            string caption = "Confirmation of deletion";
             MessageBoxButtons buttons = MessageBoxButtons.YesNo;
 
             DialogResult result = MessageBox.Show(message, caption, buttons);

@@ -11,13 +11,6 @@ namespace Dual_Image_Finder.Models
         public bool DeletedOrMove { get; set; }
         public Bitmap Bitmap { get; set; }
 
-        public InfoImage(string name, string path, bool deleted)
-        {
-            Name = name;
-            Path = path;
-            DeletedOrMove = deleted;
-        }
-
         public InfoImage(string name, string path)
         {
             Name = name;

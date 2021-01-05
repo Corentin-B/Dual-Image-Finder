@@ -43,9 +43,9 @@ namespace Dual_Image_Finder
             label_percentage.Text = "";
             label_percentage.Visible = false;
 
-            trackBar1.Value = initialTrackBarValue;
-            percentSimilatiry = trackBar1.Value;
-            label_percentsimilarity.Text = trackBar1.Value.ToString() + "%";
+            trackBar_percentSimilarity.Value = initialTrackBarValue;
+            percentSimilatiry = trackBar_percentSimilarity.Value;
+            label_percentsimilarity.Text = trackBar_percentSimilarity.Value.ToString() + "%";
 
             label_text_DescImgLeft.Text = "";
             label_text_DescImgRight.Text = "";
@@ -70,10 +70,13 @@ namespace Dual_Image_Finder
 
         private void button_Start_Click(object sender, EventArgs e)
         {
-            button_Start.Enabled = false;
-            button_TargetFolder.Enabled = false;
+            disableOptions();
 
-            TComparator tComparator = new TComparator(this, folderBrowserDialog_1.SelectedPath, percentSimilatiry, checkBox_Auto.Checked, radioButton_Delete.Checked);
+            ImageParameters imageParameters = new ImageParameters(this, folderBrowserDialog_1.SelectedPath, percentSimilatiry, checkBox_Auto.Checked, radioButton_Delete.Checked, checkBox_keeplaLargerSize.Checked, checkBox_UseMatrice.Checked);
+
+
+            //TComparator tComparator = new TComparator(this, folderBrowserDialog_1.SelectedPath, percentSimilatiry, checkBox_Auto.Checked, radioButton_Delete.Checked);
+            TComparator tComparator = new TComparator(imageParameters);
             threadComparator = new Thread(tComparator.ThreadSupervisor);
             threadComparator.Start();
 
@@ -84,7 +87,7 @@ namespace Dual_Image_Finder
 
         private void button_ImgNext_Click(object sender, EventArgs e)
         {
-            Continue();
+            NextIteration();
         }
 
         private void button_ImgLeftFolder_Click(object sender, EventArgs e)
@@ -97,7 +100,7 @@ namespace Dual_Image_Finder
             //Set deleted to true in list
             deleteFile(LeftInfoImage.Path);
             LeftInfoImage.DeletedOrMove = true;
-            Continue();
+            NextIteration();
         }
 
         private void button_ImgRightFolder_Click(object sender, EventArgs e)
@@ -111,19 +114,20 @@ namespace Dual_Image_Finder
             pictureBox_right.BackgroundImage.Dispose();
             deleteFile(RightInfoImage.Path);
             RightInfoImage.DeletedOrMove = true;
-            Continue();
+            NextIteration();
         }
 
         private void trackBar1_Scroll(object sender, EventArgs e)
         {
-            label_percentsimilarity.Text = trackBar1.Value.ToString() + "%";
-            percentSimilatiry = trackBar1.Value;
+            label_percentsimilarity.Text = trackBar_percentSimilarity.Value.ToString() + "%";
+            percentSimilatiry = trackBar_percentSimilarity.Value;
         }
 
         private void checkBox_Auto_CheckedChanged(object sender, EventArgs e)
         {
             radioButton_Move.Enabled = checkBox_Auto.Checked;
             radioButton_Delete.Enabled = checkBox_Auto.Checked;
+            checkBox_keeplaLargerSize.Enabled = checkBox_Auto.Checked;
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -134,7 +138,7 @@ namespace Dual_Image_Finder
             }
         }
 
-        private void Continue()
+        private void NextIteration()
         {
             autoEvent.Set();
             resetFront();
@@ -161,6 +165,10 @@ namespace Dual_Image_Finder
             PopUpDelete popUpDelete = new PopUpDelete();
             popUpDelete.deleteImage(filePath);
         }
+
+        #endregion
+
+        #region updateFront
 
         private void resetFront()
         {
@@ -196,10 +204,9 @@ namespace Dual_Image_Finder
 
         private void ComparatorEnd()
         {
-            button_Start.Enabled = true;
-            button_TargetFolder.Enabled = true;
-            groupBox_WhenFind.Enabled = true;
-            label_percentage.Text = "Fin";
+            enableOptions();
+            resetFront();
+            label_percentage.Text = "End";
             pictureBox_left.BackgroundImage.Dispose();
             pictureBox_right.BackgroundImage.Dispose();
             openFolder(LeftInfoImage.Path);
@@ -207,10 +214,29 @@ namespace Dual_Image_Finder
 
         private void ComparatorNoFind()
         {
+            enableOptions();
+            resetFront();
+            label_percentage.Text = "0 Images Find";
+        }
+
+        private void disableOptions()
+        {
+            button_Start.Enabled = false;
+            button_TargetFolder.Enabled = false;
+            textBox_1.Enabled = false;
+            trackBar_percentSimilarity.Enabled = false;
+            groupBox_WhenFind.Enabled = false;
+            checkBox_UseMatrice.Enabled = false;
+        }
+
+        private void enableOptions()
+        {
             button_Start.Enabled = true;
             button_TargetFolder.Enabled = true;
+            textBox_1.Enabled = true;
+            trackBar_percentSimilarity.Enabled = true;
             groupBox_WhenFind.Enabled = true;
-            label_percentage.Text = "0 Images Find";
+            checkBox_UseMatrice.Enabled = true;
         }
 
         #endregion

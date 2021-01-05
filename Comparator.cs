@@ -62,7 +62,7 @@ namespace Dual_Image_Finder
 
             Bitmap resizeRightInfoImage = ResizeBitmap(rightInfoImage.Bitmap, leftInfoImage.Bitmap.Height, leftInfoImage.Bitmap.Width);
 
-            //TODO stream (Enumerable) ?
+            //TODO stream (IEnumerable) ?
 
             for (int i = 0; i < leftInfoImage.Bitmap.Width; i++)
             {

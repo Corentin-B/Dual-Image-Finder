@@ -1,6 +1,5 @@
 ﻿using Dual_Image_Finder.Models;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -72,10 +71,17 @@ namespace Dual_Image_Finder
         {
             disableOptions();
 
-            ImageParameters imageParameters = new ImageParameters(this, folderBrowserDialog_1.SelectedPath, percentSimilatiry, checkBox_Auto.Checked, radioButton_Delete.Checked, checkBox_keeplaLargerSize.Checked, checkBox_UseMatrice.Checked);
+            ImageParameters imageParameters = new ImageParameters
+            {
+                MainForm = this,
+                FolderPath = folderBrowserDialog_1.SelectedPath,
+                ComparisonRate = percentSimilatiry,
+                Auto = checkBox_Auto.Checked,
+                DeleteRequire = radioButton_Delete.Checked,
+                KeeplaLargerSize = checkBox_keeplaLargerSize.Checked,
+                UseMatrice = checkBox_UseMatrice.Checked,
+            };
 
-
-            //TComparator tComparator = new TComparator(this, folderBrowserDialog_1.SelectedPath, percentSimilatiry, checkBox_Auto.Checked, radioButton_Delete.Checked);
             TComparator tComparator = new TComparator(imageParameters);
             threadComparator = new Thread(tComparator.ThreadSupervisor);
             threadComparator.Start();
@@ -338,6 +344,5 @@ namespace Dual_Image_Finder
         }
 
         #endregion
-
     }
 }

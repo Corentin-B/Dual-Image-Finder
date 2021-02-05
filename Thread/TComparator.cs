@@ -70,8 +70,8 @@ namespace Dual_Image_Finder
                 idRightImage = listInfoImage.FindIndex(image => image.Name.Equals(compareRightInfoImage.Name));
             }
 
-            Comparator comparator = new Comparator(imageParameters.MainForm);
-            return comparator.ListImageComparator(listInfoImage, idLeftImage, idRightImage, imageParameters.ComparisonRate);
+            ComparatorDirector comparator = new ComparatorDirector(imageParameters.MainForm);
+            return comparator.ListImageComparator(listInfoImage, idLeftImage, idRightImage, imageParameters.ComparisonRate, imageParameters.UseMatrice);
         }
 
         private List<InfoImage> UpdateList(List<InfoImage> listInfoImage)

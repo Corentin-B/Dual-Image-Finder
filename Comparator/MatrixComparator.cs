@@ -1,10 +1,7 @@
 ﻿using Dual_Image_Finder.Models;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Drawing.Imaging;
 
 namespace Dual_Image_Finder.Comparator
 {
@@ -23,9 +20,9 @@ namespace Dual_Image_Finder.Comparator
 
             for (int i = 0; i < leftInfoImage.Bitmap.Width - widthRest; i += matrixSize)
             {
-                for (int j = 0; j < leftInfoImage.Bitmap.Height - heightRest; j += matrixSize)
+                for (int j = 3; j < leftInfoImage.Bitmap.Height - heightRest; j += matrixSize)
                 {
-                    Bitmap leftBitmap = GetBitmapMatrix(leftInfoImage.Bitmap, i, j ,matrixSize);
+                    Bitmap leftBitmap = GetBitmapMatrix(leftInfoImage.Bitmap, i, j, matrixSize);
                     Bitmap rightBitmap = GetBitmapMatrix(resizeRightInfoImage, i, j, matrixSize);
 
                     Color leftColor = GetAverageColor(leftBitmap);
@@ -52,15 +49,12 @@ namespace Dual_Image_Finder.Comparator
             }
         }
 
-        private static Bitmap GetBitmapMatrix(Bitmap bitmapEnter, int WidthPixelStart, int HeightPixelStart , int matrixSize)
+        private static Bitmap GetBitmapMatrix(Bitmap bitmapEnter, int WidthPixelStart, int HeightPixelStart, int matrixSize)
         {
             Bitmap resizeImage = new Bitmap(matrixSize, matrixSize);
-            using (Graphics graphics = Graphics.FromImage(resizeImage))
-            {
-                graphics.DrawImage(bitmapEnter, WidthPixelStart, HeightPixelStart, matrixSize, matrixSize);
-            }
 
-            return resizeImage;
+            Rectangle cloneRect = new Rectangle(0, 0, matrixSize, matrixSize);
+            return bitmapEnter.Clone(cloneRect, resizeImage.PixelFormat);
         }
 
         //

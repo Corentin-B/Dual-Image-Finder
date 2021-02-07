@@ -88,6 +88,7 @@ namespace Dual_Image_Finder
 
             if (updateRightInfoImage.DeletedOrMove == true)
             {
+                imageParameters.MainForm.RemoveRightImage();
                 int idRightImage = listInfoImage.FindIndex(image => image.Name.Equals(updateRightInfoImage.Name));
                 updateListInfoImage.RemoveAt(idRightImage);
             }

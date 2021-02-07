@@ -103,7 +103,6 @@ namespace Dual_Image_Finder
 
         private void button_ImgLeftDelete_Click(object sender, EventArgs e)
         {
-            //Set deleted to true in list
             deleteFile(LeftInfoImage.Path);
             LeftInfoImage.DeletedOrMove = true;
             NextIteration();
@@ -116,7 +115,6 @@ namespace Dual_Image_Finder
 
         private void button_ImgRightDelete_Click(object sender, EventArgs e)
         {
-            //Set deleted to true in list
             pictureBox_right.BackgroundImage.Dispose();
             deleteFile(RightInfoImage.Path);
             RightInfoImage.DeletedOrMove = true;

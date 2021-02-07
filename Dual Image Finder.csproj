@@ -69,8 +69,8 @@
     <Compile Include="Comparator\MatrixComparator.cs" />
     <Compile Include="Comparator\SimpleComparator.cs" />
     <Compile Include="ImageManipulator.cs" />
+    <Compile Include="Log\LogWriter.cs" />
     <Compile Include="Models\ImageParameters.cs" />
-    <Compile Include="Models\MatrixCalculator.cs" />
     <Compile Include="MoveDeleteImage.cs" />
     <Compile Include="Thread\TComparator.cs" />
     <Compile Include="ImageFinder.cs" />

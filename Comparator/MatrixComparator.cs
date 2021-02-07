@@ -63,7 +63,6 @@ namespace Dual_Image_Finder.Comparator
         //
         private static Color GetAverageColor(Bitmap bmp)
         {
-
             //Used for tally
             int r = 0;
             int g = 0;
